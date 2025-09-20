@@ -10,9 +10,16 @@ services:
       - users-db
     networks:
       - micro_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   users-db:
-    image: mysql:8.0
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
@@ -20,6 +27,13 @@ services:
       - ./users-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - micro_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   # ---------------- PRODUCTS SERVICE ----------------
   products-service:
@@ -30,9 +44,16 @@ services:
       - products-db
     networks:
       - micro_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   products-db:
-    image: mysql:8.0
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
@@ -40,6 +61,13 @@ services:
       - ./products-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - micro_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   # ---------------- ORDERS SERVICE ----------------
   orders-service:
@@ -50,9 +78,16 @@ services:
       - orders-db
     networks:
       - micro_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   orders-db:
-    image: mysql:8.0
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
@@ -60,6 +95,13 @@ services:
       - ./orders-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - micro_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
 # ---------------- NETWORK & VOLUMES ----------------
 networks:
