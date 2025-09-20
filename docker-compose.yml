@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  users-service:
+    build: ./users-service
+    ports:
+      - "5001:5000"
+    depends_on:
+      - users-db
+    networks:
+      - micro_net
+
+  users-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - users_data:/var/lib/mysql
+      - ./users-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - micro_net
+
+networks:
+  micro_net:
+
+volumes:
+  users_data:
