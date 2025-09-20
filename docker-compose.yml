@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # ---------------- USERS SERVICE ----------------
   users-service:
-    build: ./users-service
+    image: users-service:latest
     ports:
       - "5001:5000"
     networks:
@@ -35,7 +35,7 @@ services:
 
   # ---------------- PRODUCTS SERVICE ----------------
   products-service:
-    build: ./products-service
+    image: products-service:latest
     ports:
       - "5002:5000"
     networks:
@@ -67,7 +67,7 @@ services:
 
   # ---------------- ORDERS SERVICE ----------------
   orders-service:
-    build: ./orders-service
+    image: orders-service:latest
     ports:
       - "5003:5000"
     networks:
