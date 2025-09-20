@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # ---------------- USERS SERVICE ----------------
   users-service:
-    build: ./users-service
+    build: ./users-service/.
     ports:
       - "5001:5000"
     networks:
