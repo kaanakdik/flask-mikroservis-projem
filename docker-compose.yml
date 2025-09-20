@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # ---------------- USERS SERVICE ----------------
   users-service:
     build: ./users-service
     ports:
@@ -11,7 +12,7 @@ services:
       - micro_net
 
   users-db:
-    image: mysql:5.7
+    image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
@@ -20,8 +21,51 @@ services:
     networks:
       - micro_net
 
+  # ---------------- PRODUCTS SERVICE ----------------
+  products-service:
+    build: ./products-service
+    ports:
+      - "5002:5000"
+    depends_on:
+      - products-db
+    networks:
+      - micro_net
+
+  products-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - products_data:/var/lib/mysql
+      - ./products-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - micro_net
+
+  # ---------------- ORDERS SERVICE ----------------
+  orders-service:
+    build: ./orders-service
+    ports:
+      - "5003:5000"
+    depends_on:
+      - orders-db
+    networks:
+      - micro_net
+
+  orders-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - orders_data:/var/lib/mysql
+      - ./orders-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - micro_net
+
+# ---------------- NETWORK & VOLUMES ----------------
 networks:
   micro_net:
 
 volumes:
   users_data:
+  products_data:
+  orders_data:
