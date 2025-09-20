@@ -1,16 +1,33 @@
-from flask import Flask, request, jsonify
+import time
+from mysql.connector import Error
 import mysql.connector
+from flask import Flask, request, jsonify
+
 import requests
 
 app = Flask(__name__)
 
-def get_db_connection():
-    return mysql.connector.connect(
-        host="orders-db",
-        user="root",
-        password="rootpassword",
-        database="orders_db"
-    )
+def get_db_connection(retries=5, delay=5):
+    """
+    MySQL veritabanına bağlanmayı dener.
+    retries: kaç kez denenecek
+    delay: her deneme arasında kaç saniye bekleyecek
+    """
+    attempt = 0
+    while attempt < retries:
+        try:
+            conn = mysql.connector.connect(
+                host="orders-db",
+                user="root",
+                password="rootpassword",
+                database="orders_db"
+            )
+            return conn
+        except Error as e:
+            print(f"DB connection failed: {e}. Retrying in {delay}s...")
+            attempt += 1
+            time.sleep(delay)
+    raise Exception("Could not connect to DB after multiple attempts")
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
